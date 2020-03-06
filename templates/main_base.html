@@ -1,0 +1,66 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Georgia 2020</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Menu Item</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Menu Item</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Menu Item</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact Form</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav my-2 my-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="#">{% trans 'Log in' %}</a>
+            </li>
+        </ul>
+        <div class="my-2 my-lg-0">
+            <form action="{% url 'set_language' %}" method="post" class="form-inline" onchange="this.submit()">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}"/>
+                <select name="language" class="form-control" >
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}
+                                selected="selected"{% endif %}>
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% block content %}
+
+    {% endblock %}
+</div>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>
